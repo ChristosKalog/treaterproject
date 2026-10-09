@@ -8,7 +8,11 @@ export const hasSanityConfig = Boolean(projectId)
 
 export const client = hasSanityConfig ? createClient({projectId, dataset, apiVersion, useCdn: false, perspective: 'published'}) : null
 const builder = client ? imageUrlBuilder(client) : null
-export const imageUrl = (source, width = 900) => source && builder ? builder.image(source).width(width).fit('max').auto('format').url() : ''
+export const imageUrl = (source, width = 900, height) => {
+  if (!source || !builder) return ''
+  const image = builder.image(source).width(width).auto('format')
+  return (height ? image.height(height).fit('crop') : image.fit('max')).url()
+}
 
 const query = `{
   "settings": *[_type == "theatreSettings"][0],
