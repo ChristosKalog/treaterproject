@@ -1,11 +1,14 @@
 export const byId = (items = []) => new Map(items.map((item) => [item._id, item]))
+export const normalizeSlug = (value = '') => String(value).replace(/^\/+|\/+$/g, '')
 export function enrich(data) {
-  const productions = byId(data.productions), seasons = byId(data.seasons), stages = byId(data.stages), engagements = byId(data.engagements)
+  const productionItems = (data.productions || []).map((item) => ({...item, slug: normalizeSlug(item.slug)}))
+  const articleItems = (data.articles || []).map((item) => ({...item, slug: normalizeSlug(item.slug)}))
+  const productions = byId(productionItems), seasons = byId(data.seasons), stages = byId(data.stages), engagements = byId(data.engagements)
   const events = (data.events || []).map((event) => {
     const engagement = engagements.get(event.engagementId)
     return {...event, engagement, production: productions.get(engagement?.productionId), season: seasons.get(engagement?.seasonId), stage: stages.get(event.stageId), ticketUrl: event.ticketUrl || engagement?.ticketUrl || ''}
   }).filter((event) => event.production)
-  return {...data, events}
+  return {...data, productions: productionItems, articles: articleItems, events}
 }
 export const unique = (values) => [...new Set(values.filter(Boolean))].sort((a,b) => a.localeCompare(b, 'el'))
 export const safeExternalUrl = (value) => {
