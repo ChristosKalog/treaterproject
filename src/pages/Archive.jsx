@@ -1,0 +1,4 @@
+import Seo from '../components/Seo'
+import {ProductionCard, Empty} from '../components/Common'
+
+export default function Archive({data}) { return <div className="page-shell page"><Seo title="Αρχείο παραστάσεων" description="Παραστάσεις οργανωμένες ανά θεατρική σεζόν."/><header className="page-header"><p className="eyebrow">Παλαιότερες παραγωγές</p><h1>Αρχείο</h1></header>{data.seasons.map(season=>{const ids=new Set(data.engagements.filter(e=>e.seasonId===season._id).map(e=>e.productionId)); const items=data.productions.filter(p=>ids.has(p._id));return <section className="archive-season section" key={season._id}><h2>{season.title}{season.isActive&&<span className="active-season">Ενεργή σεζόν</span>}</h2>{items.length?<div className="card-grid compact">{items.map(p=><ProductionCard key={p._id} production={p}/>)}</div>:<Empty>Δεν υπάρχουν παραστάσεις σε αυτή τη σεζόν.</Empty>}</section>})}</div> }

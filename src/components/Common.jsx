@@ -1,0 +1,15 @@
+import {Link} from 'react-router-dom'
+import {PortableText} from '@portabletext/react'
+import {imageUrl} from '../data/sanity'
+import {formatDateTime, isPast} from '../lib/date'
+import {safeExternalUrl} from '../lib/content'
+
+export const portableComponents = {marks: {link: ({value, children}) => { const href = safeExternalUrl(value?.href); return href ? <a href={href} target="_blank" rel="noreferrer">{children}</a> : <>{children}</> }}}
+export function RichText({value}) { return value?.length ? <div className="prose"><PortableText value={value} components={portableComponents}/></div> : null }
+export function Poster({production, size = 600}) { const src = imageUrl(production.poster, size); return src ? <img className="poster" src={src} alt={production.poster?.alt || `Αφίσα: ${production.title}`} loading="lazy" width={size} /> : <div className="poster placeholder" role="img" aria-label={`Δεν υπάρχει αφίσα για: ${production.title}`}><span>{production.title}</span></div> }
+export function Status({status, past}) { const label = past ? 'Ολοκληρώθηκε' : status === 'soldOut' ? 'Sold out' : status === 'cancelled' ? 'Ακυρώθηκε' : 'Διαθέσιμη'; return <span className={`status ${past ? 'past' : status}`}>{label}</span> }
+export function ProductionCard({production, nextEvent}) { return <article className="production-card"><Link to={`/parastaseis/${production.slug}`}><Poster production={production}/><div><p className="eyebrow">{production.category}</p><h3>{production.title}</h3><p>{production.summary}</p>{nextEvent && <p className="next-date">Επόμενη: {formatDateTime(nextEvent.startsAt)}</p>}</div></Link></article> }
+export function EventRow({event, onIcs}) { const past = isPast(event.startsAt); const canBuy = !past && event.status === 'available'; return <article className="event-row"><div><time dateTime={event.startsAt}>{formatDateTime(event.startsAt)}</time><p>{event.production.title} · {event.stage?.name}</p></div><Status status={event.status} past={past}/><div className="row-actions">{onIcs && <button className="text-button" onClick={() => onIcs(event)}>Προσθήκη στο ημερολόγιο</button>}{canBuy && safeExternalUrl(event.ticketUrl) ? <a className="button" href={safeExternalUrl(event.ticketUrl)} target="_blank" rel="noreferrer">Αγορά εισιτηρίων</a> : canBuy && <Link className="text-link" to="/epikoinonia">Πληροφορίες εισιτηρίων</Link>}</div></article> }
+export function Loading() { return <div className="state" aria-live="polite">Φόρτωση περιεχομένου…</div> }
+export function ErrorState({message, retry}) { return <div className="state"><h1>Κάτι πήγε στραβά</h1><p>{message}</p><button className="button" onClick={retry}>Νέα προσπάθεια</button></div> }
+export function Empty({children='Δεν υπάρχει διαθέσιμο περιεχόμενο.'}) { return <p className="empty">{children}</p> }

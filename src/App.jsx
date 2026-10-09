@@ -1,0 +1,17 @@
+import {Routes,Route} from 'react-router-dom'
+import Layout from './components/Layout'
+import {Loading,ErrorState} from './components/Common'
+import {useSiteData} from './data/DataContext'
+import {enrich} from './lib/content'
+import Home from './pages/Home'
+import Productions from './pages/Productions'
+import ProductionDetail from './pages/ProductionDetail'
+import Schedule from './pages/Schedule'
+import Archive from './pages/Archive'
+import News from './pages/News'
+import ArticleDetail from './pages/ArticleDetail'
+import Theatre from './pages/Theatre'
+import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
+
+export default function App(){const {data,loading,error,refresh}=useSiteData(); if(loading)return <Loading/>; if(error)return <ErrorState message={error} retry={refresh}/>; if(!data)return <ErrorState message="Δεν βρέθηκε περιεχόμενο." retry={refresh}/>; const content=enrich(data); return <Layout><Routes><Route path="/" element={<Home data={content}/>}/><Route path="/parastaseis" element={<Productions data={content}/>}/><Route path="/parastaseis/:slug" element={<ProductionDetail data={content}/>}/><Route path="/programma" element={<Schedule data={content}/>}/><Route path="/arxeio" element={<Archive data={content}/>}/><Route path="/nea" element={<News data={content}/>}/><Route path="/nea/:slug" element={<ArticleDetail data={content}/>}/><Route path="/theatro" element={<Theatre data={content}/>}/><Route path="/epikoinonia" element={<Contact data={content}/>}/><Route path="*" element={<NotFound/>}/></Routes></Layout>}

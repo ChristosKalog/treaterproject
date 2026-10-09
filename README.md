@@ -1,0 +1,96 @@
+# Επαναχρησιμοποιήσιμη ιστοσελίδα θεάτρου
+
+Λειτουργική πρώτη έκδοση δημόσιας ιστοσελίδας σε React/Vite και διαχειριστικού σε Sanity Studio. Χωρίς στοιχεία Sanity η εφαρμογή ανοίγει αυτόματα σε σαφώς επισημασμένο demo mode.
+
+## Τι περιλαμβάνει
+
+- Αρχική, παραστάσεις με αναζήτηση/φίλτρα, σελίδα παράστασης, μηνιαίο πρόγραμμα και λίστα, αρχείο ανά σεζόν, νέα, πληροφορίες θεάτρου και επικοινωνία.
+- Αυτόματη απόκρυψη ολοκληρωμένων ημερομηνιών από τα «προσεχή», αλλά διατήρησή τους στο αρχείο και στις σελίδες παραγωγών.
+- Καταστάσεις Διαθέσιμη, Sold out και Ακυρώθηκε ανά ημερομηνία, ασφαλή URLs προπώλησης και λήψη `.ics`.
+- Ώρες πάντα σε `Europe/Athens`, responsive mobile list, loading/error/empty/404 καταστάσεις και βασικό SEO.
+- Ελληνικό Sanity Studio με validations, μοναδικά slugs, μοναδικό έγγραφο ρυθμίσεων και ενέργεια αντιγραφής ένταξης σε νέα σεζόν.
+
+## Τοπική εγκατάσταση
+
+Προτείνεται Node.js 22.13+ ή 24 LTS.
+
+```bash
+npm install
+cp .env.example .env.local
+cp studio/.env.example studio/.env.local
+npm run dev
+```
+
+Για το Studio:
+
+```bash
+npm run studio
+```
+
+Χωρίς `VITE_SANITY_PROJECT_ID`, το δημόσιο site χρησιμοποιεί τα δοκιμαστικά δεδομένα του `src/data/demoData.js`. Η σχετική ένδειξη δεν πρέπει να αφαιρεθεί όσο δεν υπάρχει πραγματική σύνδεση CMS.
+
+## Σύνδεση με Sanity
+
+1. Δημιουργήστε project και public dataset (συνήθως `production`) από το [Sanity Manage](https://www.sanity.io/manage).
+2. Αντιγράψτε το `.env.example` σε `.env.local` και συμπληρώστε:
+
+```dotenv
+VITE_SANITY_PROJECT_ID=το_project_id
+VITE_SANITY_DATASET=production
+VITE_SANITY_API_VERSION=2026-10-09
+SANITY_STUDIO_PROJECT_ID=το_project_id
+SANITY_STUDIO_DATASET=production
+```
+
+Συμπληρώστε τα `SANITY_STUDIO_*` και στο `studio/.env.local`. Τα project ID και dataset είναι δημόσια αναγνωριστικά. **Μην προσθέσετε write/read token σε μεταβλητή `VITE_*`, στο repository ή στο Netlify frontend.** Η δημόσια εφαρμογή ζητά μόνο δημοσιευμένα έγγραφα (`perspective: published`) χωρίς token. Η επεξεργασία γίνεται από το authenticated Studio.
+
+### CORS
+
+Στο Sanity Manage → API → CORS origins προσθέστε:
+
+- `http://localhost:5173` για τοπική ανάπτυξη.
+- Το τελικό Netlify domain, π.χ. `https://example-theatre.netlify.app`.
+
+Για το δημόσιο site δεν χρειάζονται credentials. Προσθέστε μόνο τα ακριβή origins που χρησιμοποιούνται, όχι wildcard.
+
+## Ροή περιεχομένου
+
+Η «Παράσταση» είναι η μόνιμη σελίδα του έργου. Η «Παράσταση ανά σεζόν» τη συνδέει με μία σεζόν και κρατά το προεπιλεγμένο URL προπώλησης. Κάθε «Ημερομηνία / Πρόγραμμα» συνδέεται με αυτή την ένταξη και έχει δική της σκηνή, ώρα, κατάσταση και προαιρετικό URL.
+
+Έτσι μια παραγωγή επιστρέφει σε νέα σεζόν χωρίς νέο slug ή διπλή σελίδα. Η ειδική ενέργεια «Αντιγραφή σε νέα σεζόν» δημιουργεί μόνο τη νέα ένταξη: δεν αντιγράφει ημερομηνίες, ακυρώσεις ή sold out.
+
+Το Studio επιτρέπει drafts και publish. Το δημόσιο site διαβάζει μόνο published περιεχόμενο. Κάνει νέα ανάκτηση κατά την είσοδο, όταν η καρτέλα ξαναγίνει ενεργή και ανά 60 δευτερόλεπτα, με `useCdn: false`, ώστε δημοσιευμένες αλλαγές να εμφανίζονται χωρίς νέο deployment.
+
+## Deployment στο Netlify
+
+### Δημόσια ιστοσελίδα
+
+1. Συνδέστε το repository στο Netlify.
+2. Build command: `npm run build`.
+3. Publish directory: `dist`.
+4. Προσθέστε τις τρεις `VITE_SANITY_*` μεταβλητές στο Site configuration → Environment variables.
+5. Κάντε deploy και προσθέστε το τελικό origin στο Sanity CORS.
+
+Το `netlify.toml` περιλαμβάνει routing fallback προς `/index.html`, απαραίτητο για απευθείας άνοιγμα routes όπως `/parastaseis/...`.
+
+### Sanity Studio
+
+Μπορεί να φιλοξενηθεί από το Sanity (`cd studio && npx sanity deploy`) ή ως δεύτερο Netlify site με build command `npm run studio:build` και publish directory `studio-dist`. Στο δεύτερο site ορίστε `SANITY_STUDIO_PROJECT_ID` και `SANITY_STUDIO_DATASET`.
+
+## Preview πρόχειρου περιεχομένου
+
+Δεν προστέθηκε ψεύτικο κουμπί preview. Πραγματικό draft preview απαιτεί ασφαλή server-side υποδομή που κρατά read token εκτός browser, ελέγχει authenticated preview session και χρησιμοποιεί Sanity Visual Editing/Presentation. Αυτό είναι σκόπιμα επόμενο βήμα· ποτέ μην βάλετε preview token σε `VITE_*`.
+
+## Έλεγχοι
+
+```bash
+npm test
+npm run build
+npm run studio:build
+```
+
+Οι αυτοματοποιημένοι έλεγχοι καλύπτουν ειδικά την αλλαγή ημερομηνίας γύρω από τα μεσάνυχτα της Αθήνας και το άλμα στη θερινή ώρα. Πριν από παραγωγική δημοσίευση ελέγξτε επίσης με πραγματικό περιεχόμενο: φίλτρα, αγορά εισιτηρίου, sold out/ακύρωση, `.ics`, alt text και CORS.
+
+## Προαιρετικό δοκιμαστικό περιεχόμενο
+
+Το `scripts/seed-demo.mjs` δεν εκτελείται ποτέ αυτόματα. Απαιτεί ρητά `CONFIRM_SEED=YES`, project/dataset και προσωρινό write token μόνο στο περιβάλλον του τοπικού command. Χρησιμοποιήστε το μόνο σε κενό δοκιμαστικό dataset.
