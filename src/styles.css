@@ -1,16 +1,13 @@
 :root {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #111;
-  background: #fff;
+  background: #fbfbfa;
   font-synthesis: none;
   --border: #c9c9c9;
   --muted: #5e5e5e;
   --max: 1180px;
+  --display: "Noto Serif", Georgia, serif;
+  --ease: 180ms ease;
 }
 * {
   box-sizing: border-box;
@@ -23,6 +20,7 @@ body {
   min-width: 320px;
   font-size: 1rem;
   line-height: 1.55;
+  background: #fbfbfa;
 }
 a {
   color: inherit;
@@ -30,6 +28,11 @@ a {
 }
 a:hover {
   text-decoration-thickness: 2px;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--display);
 }
 button,
 input,
@@ -64,10 +67,12 @@ a {
   font-size: 0.875rem;
 }
 .site-header {
-  position: relative;
-  background: #fff;
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  z-index: 10;
+  z-index: 20;
 }
 .header-inner {
   max-width: var(--max);
@@ -83,6 +88,19 @@ a {
   font-weight: 800;
   text-decoration: none;
   letter-spacing: -0.03em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.brand-logo,
+.footer-logo {
+  border-radius: 50%;
+  object-fit: contain;
+  background: #fff;
+}
+.brand-logo {
+  width: 3.25rem;
+  height: 3.25rem;
 }
 .nav {
   display: flex;
@@ -90,14 +108,27 @@ a {
   align-items: center;
 }
 .nav a {
+  position: relative;
   text-decoration: none;
   padding: 0.3rem 0;
-  border-bottom: 2px solid transparent;
   font-size: 0.94rem;
 }
-.nav a:hover,
-.nav a.active {
-  border-color: #111;
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--ease);
+}
+.nav a:hover::after,
+.nav a.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 .menu-button {
   display: none;
@@ -121,19 +152,63 @@ a {
   margin-bottom: 2.5rem;
 }
 .page-header h1,
-.hero h1 {
+.visual-hero h1 {
+  font-family: var(--display);
   font-size: clamp(2.7rem, 8vw, 6.6rem);
-  letter-spacing: -0.065em;
-  line-height: 0.94;
+  letter-spacing: -0.045em;
+  line-height: 1;
   margin: 0.2rem 0;
 }
-.hero {
-  padding-top: 8rem;
-  padding-bottom: 8rem;
-  border-bottom: 1px solid var(--border);
+.visual-hero {
+  position: relative;
+  min-height: clamp(520px, 70vh, 760px);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(135deg, #111 0%, #333 100%);
+  border-bottom: 1px solid #111;
 }
-.hero .lead {
+.visual-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.84) 0%, rgba(0, 0, 0, 0.48) 48%, rgba(0, 0, 0, 0.16) 100%);
+}
+.hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.visual-hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-top: 8rem;
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+.visual-hero .lead {
   max-width: 760px;
+}
+.visual-hero .eyebrow {
+  color: rgba(255, 255, 255, 0.78);
+}
+.page-visual-hero {
+  min-height: clamp(420px, 58vh, 620px);
+}
+.visual-hero .button {
+  background: #fff;
+  border-color: #fff;
+  color: #111;
+}
+.visual-hero .button:hover {
+  background: transparent;
+  color: #fff;
+}
+.visual-hero .text-link {
+  color: #fff;
 }
 .lead {
   font-size: clamp(1.25rem, 2.5vw, 1.8rem);
@@ -164,10 +239,12 @@ a {
   text-decoration: none;
   font-weight: 700;
   cursor: pointer;
+  transition: background-color var(--ease), color var(--ease), transform var(--ease);
 }
 .button:hover {
   background: #fff;
   color: #111;
+  transform: translateY(-2px);
 }
 .text-link,
 .text-button {
@@ -206,6 +283,15 @@ a {
 .production-card a {
   text-decoration: none;
 }
+.production-card {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  transition: transform var(--ease), border-color var(--ease);
+}
+.production-card:hover {
+  transform: translateY(-5px);
+  border-color: #111;
+}
 .production-card h3 {
   font-size: 1.5rem;
   line-height: 1.1;
@@ -222,6 +308,10 @@ a {
   border: 1px solid var(--border);
   display: block;
   margin-bottom: 1rem;
+  transition: filter var(--ease);
+}
+.production-card:hover .poster {
+  filter: contrast(1.04) saturate(1.04);
 }
 .poster.placeholder {
   background: #f2f2f2;
@@ -256,7 +346,7 @@ a {
   font-weight: 700;
 }
 .contrast-section {
-  background: #111;
+  background: linear-gradient(135deg, #090909 0%, #242424 100%);
   color: #fff;
   padding-block: 4rem;
 }
@@ -271,6 +361,11 @@ a {
   padding: 1rem 0;
   border-bottom: 1px solid #666;
   text-decoration: none;
+  transition: padding-inline var(--ease), background-color var(--ease);
+}
+.week-list a:hover {
+  padding-inline: 0.75rem;
+  background: rgba(255, 255, 255, 0.07);
 }
 .news-grid {
   display: grid;
@@ -279,6 +374,16 @@ a {
 }
 .news-grid h3 {
   font-size: 1.35rem;
+}
+.news-grid article {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, #fff 0%, #f4f4f1 100%);
+  transition: transform var(--ease), border-color var(--ease);
+}
+.news-grid article:hover {
+  transform: translateY(-4px);
+  border-color: #111;
 }
 .filters {
   display: grid;
@@ -311,6 +416,7 @@ a {
   align-items: center;
 }
 .detail-hero h1 {
+  font-family: var(--display);
   font-size: clamp(2.5rem, 7vw, 5.5rem);
   line-height: 0.95;
   letter-spacing: -0.06em;
@@ -505,6 +611,20 @@ a {
 .contact {
   font-style: normal;
 }
+.contact-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1.75rem;
+  max-width: 900px;
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.28);
+  font-style: normal;
+}
+.contact-quick a {
+  font-weight: 700;
+}
 .contact > div {
   border-top: 1px solid var(--border);
   padding: 1.5rem 0;
@@ -535,6 +655,15 @@ a {
   display: flex;
   justify-content: space-between;
 }
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.footer-logo {
+  width: 3rem;
+  height: 3rem;
+}
 .site-footer p {
   margin: 0.3rem 0;
   color: var(--muted);
@@ -558,8 +687,11 @@ a {
   .nav.open {
     display: flex;
   }
-  .hero {
-    padding-block: 5rem;
+  .visual-hero {
+    min-height: 520px;
+  }
+  .visual-hero::after {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.3) 100%);
   }
   .card-grid,
   .news-grid {
@@ -665,9 +797,21 @@ a {
   .site-footer > div + div {
     margin-top: 1rem;
   }
+  .brand span {
+    font-size: 1rem;
+  }
+  .brand-logo {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .contact-quick {
+    display: grid;
+    gap: 0.6rem;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto !important;
+    transition: none !important;
   }
 }
