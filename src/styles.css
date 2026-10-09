@@ -216,6 +216,7 @@ a {
 }
 .poster {
   width: 100%;
+  height: auto;
   aspect-ratio: 1;
   object-fit: cover;
   border: 1px solid var(--border);
@@ -234,6 +235,7 @@ a {
 }
 .cover-image {
   width: 100%;
+  height: auto;
   aspect-ratio: 758 / 432;
   object-fit: cover;
   border: 1px solid var(--border);
