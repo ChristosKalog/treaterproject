@@ -4,6 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
 import {structure} from './structure'
 import {DuplicateEngagementAction} from './actions/DuplicateEngagementAction'
+import {DuplicateProductionAction} from './actions/DuplicateProductionAction'
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'demo'
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
@@ -16,6 +17,7 @@ export default defineConfig({
     actions: (actions, context) => {
       if (context.schemaType === 'theatreSettings') return actions.filter(({action}) => ['publish','discardChanges','restore'].includes(action))
       if (context.schemaType === 'seasonEngagement') return [...actions.filter(({action}) => action !== 'duplicate'), DuplicateEngagementAction]
+      if (context.schemaType === 'production') return [...actions.filter(({action}) => action !== 'duplicate'), DuplicateProductionAction]
       return actions
     },
   },
