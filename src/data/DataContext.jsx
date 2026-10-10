@@ -10,7 +10,7 @@ export function DataProvider({children}) {
   const refresh = useCallback(async () => {
     if (!hasSanityConfig) return
     try { setError(''); const next = await fetchSiteData(); setData(next) }
-    catch { setError('Δεν ήταν δυνατή η φόρτωση του περιεχομένου. Δοκιμάστε ξανά.') }
+    catch { setError('load-error') }
     finally { setLoading(false) }
   }, [])
   useEffect(() => {

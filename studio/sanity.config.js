@@ -10,7 +10,7 @@ const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'demo'
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
 
 export default defineConfig({
-  name: 'theatre-studio', title: 'Διαχείριση θεάτρου', projectId, dataset,
+  name:'amalia-theatre-studio',title:'Θέατρο Αμαλία · Διαχείριση',projectId,dataset,
   plugins: [structureTool({structure}), visionTool({defaultApiVersion:'2026-10-09'})],
   schema: {types: schemaTypes, templates: (templates) => templates.filter((template) => template.schemaType !== 'theatreSettings')},
   document: {

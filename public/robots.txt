@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amaliatheatre.netlify.app/sitemap.xml

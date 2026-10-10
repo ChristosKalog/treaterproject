@@ -9,6 +9,8 @@
 - Καταστάσεις Διαθέσιμη, Sold out και Ακυρώθηκε ανά ημερομηνία, ασφαλή URLs προπώλησης και λήψη `.ics`.
 - Ώρες πάντα σε `Europe/Athens`, responsive mobile list, loading/error/empty/404 καταστάσεις και βασικό SEO.
 - Ελληνικό Sanity Studio με validations, μοναδικά slugs, μοναδικό έγγραφο ρυθμίσεων και ενέργεια αντιγραφής ένταξης σε νέα σεζόν.
+- Ελληνική και αγγλική δημόσια έκδοση, με κοινές ημερομηνίες/εικόνες και ελεγχόμενη δημοσίευση μεταφράσεων.
+- Canonical και `hreflang` URLs, Open Graph metadata, Schema.org δεδομένα και sitemap που ενημερώνεται στο build.
 
 ## Τοπική εγκατάσταση
 
@@ -38,6 +40,7 @@ npm run studio
 VITE_SANITY_PROJECT_ID=το_project_id
 VITE_SANITY_DATASET=production
 VITE_SANITY_API_VERSION=2026-10-09
+PUBLIC_SITE_URL=https://amaliatheatre.netlify.app
 SANITY_STUDIO_PROJECT_ID=το_project_id
 SANITY_STUDIO_DATASET=production
 ```
@@ -93,7 +96,28 @@ SANITY_STUDIO_DATASET=production
 
 ### Sanity Studio
 
-Μπορεί να φιλοξενηθεί από το Sanity (`cd studio && npx sanity deploy`) ή ως δεύτερο Netlify site με build command `npm run studio:build` και publish directory `studio-dist`. Στο δεύτερο site ορίστε `SANITY_STUDIO_PROJECT_ID` και `SANITY_STUDIO_DATASET`.
+Η απλούστερη λύση για τον διαχειριστή είναι η φιλοξενία από το Sanity. Εκτελείται μία φορά:
+
+```bash
+npm run studio:deploy
+```
+
+Η CLI ζητά σύνδεση στον Sanity λογαριασμό και ένα μοναδικό hostname, π.χ. `amalia-theatre`, ώστε το Studio να ανοίγει από σταθερή διεύθυνση τύπου `https://amalia-theatre.sanity.studio`. Οι επόμενες αλλαγές των schemas δημοσιεύονται ξανά με την ίδια εντολή. Εναλλακτικά, μπορεί να δημιουργηθεί δεύτερο Netlify site με build command `npm run studio:build` και publish directory `studio-dist`.
+
+## Δίγλωσσο περιεχόμενο
+
+- Τα υπάρχοντα πεδία είναι η ελληνική έκδοση και παραμένουν ανέπαφα.
+- Στις Παραστάσεις, στα Νέα, στις Σκηνές και στα Στοιχεία θεάτρου υπάρχουν καρτέλες **Ελληνικά / English**.
+- Η παράσταση ή το άρθρο εμφανίζεται στο αγγλικό site μόνο όταν ενεργοποιηθεί το **«Έτοιμη η αγγλική έκδοση»**. Έτσι δεν δημοσιεύεται κατά λάθος μισή μετάφραση.
+- Οι εικόνες, οι ημερομηνίες, οι καταστάσεις sold out/ακύρωσης και τα URLs εισιτηρίων είναι κοινά και δεν καταχωρίζονται δεύτερη φορά.
+- Τα slugs παραμένουν κοινά και σταθερά. Οι διαδρομές είναι π.χ. `/el/parastaseis/slug` και `/en/productions/slug`.
+- Τα παλιά ελληνικά URLs χωρίς `/el` κάνουν αυτόματη ανακατεύθυνση στη νέα ελληνική διεύθυνση.
+
+Το sitemap δημιουργείται πριν από κάθε production build. Περιλαμβάνει αυτόματα τις δημοσιευμένες ελληνικές σελίδες και μόνο τις αγγλικές παραστάσεις/άρθρα που έχουν σημειωθεί ως έτοιμα.
+
+## Οπτική ταυτότητα
+
+Οι Rubik και Roboto Mono φιλοξενούνται μέσα στο build και δεν φορτώνονται από Google. Η Rubik χρησιμοποιείται ως βασική οικογενειακή σύνδεση με το Too Far East και η Roboto Mono σε ημερομηνίες και μικρές πληροφορίες. Το footer περιλαμβάνει διακριτικό σύνδεσμο «Ένα project της Too Far East».
 
 ## Preview πρόχειρου περιεχομένου
 

@@ -1,12 +1,17 @@
 :root {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #111;
-  background: #fbfbfa;
+  font-family: "Rubik Variable", "Rubik", system-ui, sans-serif;
+  color: #181311;
+  background: #f5f1e9;
   font-synthesis: none;
-  --border: #c9c9c9;
-  --muted: #5e5e5e;
+  --border: #c9c0b2;
+  --muted: #675f57;
   --max: 1180px;
-  --display: "Noto Serif", Georgia, serif;
+  --display: "Rubik Variable", "Rubik", system-ui, sans-serif;
+  --mono: "Roboto Mono Variable", "Roboto Mono", monospace;
+  --paper: #f5f1e9;
+  --ink: #181311;
+  --wine: #641a2b;
+  --gold: #d5b963;
   --ease: 180ms ease;
 }
 * {
@@ -20,7 +25,7 @@ body {
   min-width: 320px;
   font-size: 1rem;
   line-height: 1.55;
-  background: #fbfbfa;
+  background: var(--paper);
 }
 a {
   color: inherit;
@@ -33,6 +38,7 @@ h1,
 h2,
 h3 {
   font-family: var(--display);
+  font-weight: 760;
 }
 button,
 input,
@@ -69,7 +75,8 @@ a {
 .site-header {
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(24, 19, 17, 0.96);
+  color: #f7f0e2;
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   z-index: 20;
@@ -87,7 +94,7 @@ a {
   font-size: 1.35rem;
   font-weight: 800;
   text-decoration: none;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.045em;
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -113,6 +120,18 @@ a {
   padding: 0.3rem 0;
   font-size: 0.94rem;
 }
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-left: .35rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(255,255,255,.3);
+  font-family: var(--mono);
+  font-size: .75rem;
+}
+.language-switch a { opacity: .6; }
+.language-switch a.active-language { opacity: 1; color: var(--gold); }
 .nav a::after {
   content: "";
   position: absolute;
@@ -132,8 +151,9 @@ a {
 }
 .menu-button {
   display: none;
-  background: #fff;
-  border: 1px solid #111;
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
   padding: 0.5rem 0.8rem;
 }
 .page-shell {
@@ -155,7 +175,7 @@ a {
 .visual-hero h1 {
   font-family: var(--display);
   font-size: clamp(2.7rem, 8vw, 6.6rem);
-  letter-spacing: -0.045em;
+  letter-spacing: -0.06em;
   line-height: 1;
   margin: 0.2rem 0;
 }
@@ -218,6 +238,7 @@ a {
   font-size: 1.3rem;
 }
 .eyebrow {
+  font-family: var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.09em;
   font-size: 0.76rem;
@@ -232,9 +253,9 @@ a {
 }
 .button {
   display: inline-block;
-  background: #111;
+  background: var(--wine);
   color: #fff;
-  border: 1px solid #111;
+  border: 1px solid var(--wine);
   padding: 0.65rem 0.9rem;
   text-decoration: none;
   font-weight: 700;
@@ -242,8 +263,8 @@ a {
   transition: background-color var(--ease), color var(--ease), transform var(--ease);
 }
 .button:hover {
-  background: #fff;
-  color: #111;
+  background: transparent;
+  color: var(--wine);
   transform: translateY(-2px);
 }
 .text-link,
@@ -342,11 +363,12 @@ a {
   text-align: center;
 }
 .next-date {
+  font-family: var(--mono);
   font-size: 0.9rem;
   font-weight: 700;
 }
 .contrast-section {
-  background: linear-gradient(135deg, #090909 0%, #242424 100%);
+  background: linear-gradient(135deg, #17100e 0%, #38151d 100%);
   color: #fff;
   padding-block: 4rem;
 }
@@ -461,6 +483,7 @@ a {
   padding: 1.2rem 0;
 }
 .event-row time {
+  font-family: var(--mono);
   font-weight: 800;
 }
 .event-row p {
@@ -652,13 +675,17 @@ a {
   text-align: center;
 }
 .site-footer {
-  border-top: 1px solid var(--border);
-  max-width: var(--max);
-  margin: auto;
-  padding: 3rem 1.5rem;
+  border-top: 1px solid #3b302b;
+  max-width: none;
+  margin: 0;
+  padding: 3rem max(1.5rem, calc((100vw - var(--max))/2 + 1.5rem));
   display: flex;
   justify-content: space-between;
+  background: #181311;
+  color: #f7f0e2;
 }
+.footer-contact { text-align: right; }
+.footer-contact p { font-family: var(--mono); font-size: .75rem; }
 .footer-brand {
   display: flex;
   align-items: center;
@@ -670,7 +697,7 @@ a {
 }
 .site-footer p {
   margin: 0.3rem 0;
-  color: var(--muted);
+  color: #c6baab;
 }
 @media (max-width: 800px) {
   .menu-button {
@@ -682,12 +709,13 @@ a {
     top: 100%;
     left: 0;
     right: 0;
-    background: #fff;
+    background: #181311;
     border-bottom: 1px solid var(--border);
     padding: 1rem 1.5rem;
     align-items: stretch;
     flex-direction: column;
   }
+  .language-switch { margin-left:0; padding:1rem 0 0; border-left:0; border-top:1px solid rgba(255,255,255,.25); }
   .nav.open {
     display: flex;
   }
@@ -747,6 +775,8 @@ a {
   .page {
     padding-block: 2.5rem 4rem;
   }
+  .site-footer { flex-direction:column; gap:2rem; }
+  .footer-contact { text-align:left; }
   .card-grid,
   .news-grid,
   .filters,
@@ -853,8 +883,9 @@ h3 {
   font-weight: 700;
 }
 .site-header {
-  background: rgba(244, 240, 233, 0.93);
-  border-color: rgba(83, 67, 55, 0.24);
+  color: #f6f0e8;
+  background: rgba(23, 20, 18, 0.96);
+  border-color: rgba(219, 197, 159, 0.25);
 }
 .header-inner {
   min-height: 84px;
@@ -876,7 +907,7 @@ h3 {
   text-transform: uppercase;
 }
 .nav a::after {
-  background: var(--accent);
+  background: var(--gold);
 }
 .page {
   padding-block: clamp(4rem, 8vw, 7rem);
@@ -1190,7 +1221,7 @@ h3 {
 }
 .contact h2 {
   color: var(--accent);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1215,14 +1246,15 @@ h3 {
 }
 .menu-button {
   background: transparent;
-  border-color: var(--ink);
+  color: inherit;
+  border-color: currentColor;
 }
 
 @media (max-width: 800px) {
   .nav {
     gap: 0.35rem;
-    background: var(--paper);
-    border-color: var(--border);
+    background: var(--ink);
+    border-color: rgba(219,197,159,.25);
   }
   .nav a {
     padding-block: 0.65rem;

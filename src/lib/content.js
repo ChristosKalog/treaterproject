@@ -1,16 +1,20 @@
 export const byId = (items = []) => new Map(items.map((item) => [item._id, item]))
 export const normalizeSlug = (value = '') => String(value).replace(/^\/+|\/+$/g, '')
-export function enrich(data) {
-  const productionItems = (data.productions || []).map((item) => ({...item, slug: normalizeSlug(item.slug)}))
-  const articleItems = (data.articles || []).map((item) => ({...item, slug: normalizeSlug(item.slug)}))
-  const productions = byId(productionItems), seasons = byId(data.seasons), stages = byId(data.stages), engagements = byId(data.engagements)
+const localized = (item, lang, fields) => lang !== 'en' ? item : fields.reduce((next, field) => ({...next, [field]: item[`${field}En`] || item[field]}), {...item})
+export function enrich(data, lang = 'el') {
+  const productionItems = (data.productions || []).filter((item) => lang === 'el' || item.englishReady).map((item) => ({...localized(item,lang,['title','summary','description','category','ageRating','priceInfo','credits']),slug:normalizeSlug(item.slug)}))
+  const articleItems = (data.articles || []).filter((item) => lang === 'el' || item.englishReady).map((item) => ({...localized(item,lang,['title','summary','body']),slug:normalizeSlug(item.slug)}))
+  const seasonItems = (data.seasons || []).map((item) => localized(item,lang,['title']))
+  const stageItems = (data.stages || []).map((item) => localized(item,lang,['name','details']))
+  const settings = localized(data.settings || {},lang,['name','shortDescription','heroMessage','about','address','access','accessibility','seoTitle','seoDescription'])
+  const productions = byId(productionItems), seasons = byId(seasonItems), stages = byId(stageItems), engagements = byId(data.engagements)
   const events = (data.events || []).map((event) => {
     const engagement = engagements.get(event.engagementId)
     return {...event, engagement, production: productions.get(engagement?.productionId), season: seasons.get(engagement?.seasonId), stage: stages.get(event.stageId), ticketUrl: event.ticketUrl || engagement?.ticketUrl || ''}
   }).filter((event) => event.production)
-  return {...data, productions: productionItems, articles: articleItems, events}
+  return {...data,settings,seasons:seasonItems,stages:stageItems,productions:productionItems,articles:articleItems,events}
 }
-export const unique = (values) => [...new Set(values.filter(Boolean))].sort((a,b) => a.localeCompare(b, 'el'))
+export const unique = (values, locale='el') => [...new Set(values.filter(Boolean))].sort((a,b) => a.localeCompare(b,locale))
 export const safeExternalUrl = (value) => {
   try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.href : '' } catch { return '' }
 }
