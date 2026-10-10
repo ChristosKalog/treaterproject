@@ -6,7 +6,11 @@ const dataset = import.meta.env.VITE_SANITY_DATASET || 'production'
 const apiVersion = import.meta.env.VITE_SANITY_API_VERSION || '2026-10-09'
 export const hasSanityConfig = Boolean(projectId)
 
-export const client = hasSanityConfig ? createClient({projectId, dataset, apiVersion, useCdn: false, perspective: 'published'}) : null
+const localApiConfig = import.meta.env.DEV
+  ? {apiHost: `${window.location.origin}/sanity-api`, useProjectHostname: false}
+  : {}
+
+export const client = hasSanityConfig ? createClient({projectId, dataset, apiVersion, useCdn: false, perspective: 'published', ...localApiConfig}) : null
 const builder = client ? imageUrlBuilder(client) : null
 export const imageUrl = (source, width = 900, height) => {
   if (!source || !builder) return ''

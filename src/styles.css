@@ -511,6 +511,31 @@ a {
   gap: 1rem;
   flex-wrap: wrap;
 }
+.calendar-icon-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color var(--ease), border-width var(--ease);
+}
+.calendar-icon-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.calendar-icon-button:active {
+  border-color: var(--ink);
+  border-width: 2px;
+}
 .gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1061,6 +1086,25 @@ h3 {
   color: var(--muted);
   letter-spacing: 0.015em;
 }
+.home-upcoming .production-card,
+.home-upcoming .production-card:hover {
+  transform: none;
+  border-color: var(--border);
+}
+.home-upcoming .production-card:hover .poster {
+  filter: none;
+}
+.home-upcoming .production-card h3 {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color var(--ease);
+}
+.home-upcoming .production-card a:hover h3,
+.home-upcoming .production-card a:focus-visible h3 {
+  text-decoration-color: currentColor;
+}
 .contrast-section {
   position: relative;
   overflow: hidden;
@@ -1144,19 +1188,141 @@ h3 {
 .credits dt {
   color: var(--ink);
 }
+.production-hero {
+  padding-bottom: 0;
+}
+.production-cover {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  background: var(--paper-deep);
+}
+.production-cover .cover-image {
+  width: 100%;
+  margin: 0;
+  border: 0;
+}
+.production-title-block {
+  padding: clamp(1.4rem, 3vw, 2.25rem) 0 clamp(1.75rem, 3.5vw, 2.75rem);
+}
+.production-title-block h1 {
+  max-width: 18ch;
+  margin: 0.35rem 0 0.8rem;
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 6.5vw, 5.4rem);
+  font-weight: 640;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.production-title-block .lead {
+  max-width: 78ch;
+  margin: 0;
+}
+@media (min-width: 801px) {
+  .production-cover .cover-image {
+    aspect-ratio: 1111 / 337;
+    object-fit: cover;
+  }
+}
+.production-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+  border-block: 1px solid var(--border);
+}
+.production-facts div {
+  display: block;
+  padding: 1.1rem clamp(1rem, 2.5vw, 2rem);
+  border: 0;
+}
+.production-facts div + div {
+  border-left: 1px solid var(--border);
+}
+.production-facts dt {
+  margin-bottom: 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.production-facts dd {
+  font-size: 1.05rem;
+}
+.production-detail-page .section {
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+.production-about .prose {
+  max-width: 82ch;
+}
+.credits-section {
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.credits-section h2 {
+  margin-top: 0;
+}
+.credits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 clamp(1.25rem, 3vw, 2.5rem);
+  margin: 1.25rem 0 0;
+}
+.credits-grid div {
+  display: block;
+  padding: 0.8rem 0;
+}
+.credits-grid dt {
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+}
+.credits-more {
+  margin-top: 1rem;
+}
+.credits-more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.credits-more summary::-webkit-details-marker {
+  display: none;
+}
+.credits-more summary svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  transition: transform var(--ease);
+}
+.credits-more[open] summary svg {
+  transform: rotate(180deg);
+}
+.credits-more .when-open {
+  display: none;
+}
+.credits-more[open] .when-closed {
+  display: none;
+}
+.credits-more[open] .when-open {
+  display: inline;
+}
 .event-row {
   padding-inline: 0.85rem;
   border-color: var(--border);
-  transition: background-color var(--ease), padding-inline var(--ease);
-}
-.event-row:hover {
-  padding-inline: 1.15rem;
-  background: rgba(255, 255, 255, 0.52);
 }
 .status {
   border-radius: 0;
   padding: 0.32rem 0.65rem;
   border-color: var(--accent);
+}
+.status.available {
+  color: #145c2b;
+  background: #e5f5e9;
+  border-color: #69a979;
+  border-radius: 999px;
 }
 .calendar {
   overflow: hidden;
@@ -1243,14 +1409,70 @@ h3 {
   border-color: currentColor;
 }
 
+/* Airier editorial header */
+.site-header {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.94);
+  border-color: #e7e7e7;
+  backdrop-filter: blur(18px);
+}
+.header-inner {
+  min-height: 82px;
+  padding-block: 1rem;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+.brand {
+  gap: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.brand-logo {
+  width: 2.35rem;
+  height: 2.35rem;
+  border: 0;
+}
+.nav {
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+.nav a {
+  color: #252525;
+  font-size: 0.82rem;
+  font-weight: 440;
+  letter-spacing: 0.015em;
+  text-transform: none;
+}
+.nav a::after {
+  height: 1px;
+  background: var(--ink);
+}
+.language-switch {
+  border-color: rgba(0, 0, 0, 0.16);
+}
+.language-switch a.active-language {
+  color: var(--ink);
+}
+.menu-button {
+  border: 0;
+  padding: 0.4rem 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 @media (max-width: 800px) {
   .nav {
     gap: 0.35rem;
-    background: var(--ink);
-    border-color: rgba(219,197,159,.25);
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.98);
+    border-color: #e7e7e7;
   }
   .nav a {
     padding-block: 0.65rem;
+  }
+  .language-switch {
+    border-color: rgba(0, 0, 0, 0.14);
   }
   .visual-hero {
     min-height: 540px;
@@ -1261,6 +1483,9 @@ h3 {
   .production-card:hover,
   .news-grid article:hover {
     transform: none;
+  }
+  .credits-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1292,5 +1517,13 @@ h3 {
   }
   .site-footer {
     padding-block: 3rem;
+  }
+  .production-facts,
+  .credits-grid {
+    grid-template-columns: 1fr;
+  }
+  .production-facts div + div {
+    border-left: 0;
+    border-top: 1px solid var(--border);
   }
 }
