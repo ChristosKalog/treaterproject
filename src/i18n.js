@@ -98,7 +98,7 @@ const copy = {
     imageLabel: "Εικόνα:",
     coverLabel: "Κεντρική εικόνα:",
     language: "Γλώσσα",
-    byTfe: "A project της Too Far East",
+    byTfe: "Powered by Too Far East",
   },
   en: {
     skip: "Skip to main content",
@@ -186,7 +186,7 @@ const copy = {
     imageLabel: "Image:",
     coverLabel: "Cover image:",
     language: "Language",
-    byTfe: "A project by Too Far East",
+    byTfe: "Powered by Too Far East",
   },
 };
 
