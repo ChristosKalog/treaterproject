@@ -18,6 +18,6 @@ export default function Layout({children,data:localizedData}) {
       </div>
     </header>
     <main id="main">{children}</main>
-    <footer className="site-footer"><div className="footer-brand">{logo&&<img className="footer-logo" src={logo} alt="" width="48" height="48"/>}<div><strong>{name}</strong><p>{settings.address}</p></div></div><div className="footer-contact"><a href={`mailto:${settings.email}`}>{settings.email}</a><br/><a href={`tel:${settings.phone}`}>{settings.phone}</a><p><a href="https://toofareast.com/" target="_blank" rel="noreferrer">{t.byTfe}</a></p></div></footer>
+    <footer className="site-footer"><div className="footer-main"><div className="footer-brand">{logo&&<img className="footer-logo" src={logo} alt="" width="48" height="48"/>}<div><strong>{name}</strong><p>{settings.address}</p></div></div><div className="footer-contact"><a href={`mailto:${settings.email}`}>{settings.email}</a><br/><a href={`tel:${settings.phone}`}>{settings.phone}</a></div></div><div className="footer-credit"><a href="https://toofareast.com/" target="_blank" rel="noreferrer">{t.byTfe}</a></div></footer>
   </>
 }

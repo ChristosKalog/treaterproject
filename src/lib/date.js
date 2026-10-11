@@ -24,16 +24,3 @@ export const startOfWeek = () => { const d = new Date(); const day = d.getDay() 
 export const endOfWeek = () => { const d = startOfWeek(); d.setDate(d.getDate() + 7); return d }
 export const isThisWeek = (iso) => { const d = new Date(iso); return d >= startOfWeek() && d < endOfWeek() }
 export const monthLabel = (date, locale='el-GR') => new Intl.DateTimeFormat(locale, {timeZone:ATHENS_TZ,month:'long',year:'numeric'}).format(date)
-
-const pad = (n) => String(n).padStart(2, '0')
-const icsDate = (date) => `${date.getUTCFullYear()}${pad(date.getUTCMonth()+1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`
-const escapeIcs = (value='') => value.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;')
-export function createIcs(event, production, stage) {
-  const start = new Date(event.startsAt); const end = new Date(start.getTime() + (production.duration || 90) * 60000)
-  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Theatro Starter//EL','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:${event._id}@theatro`,`DTSTAMP:${icsDate(new Date())}`,`DTSTART:${icsDate(start)}`,`DTEND:${icsDate(end)}`,`SUMMARY:${escapeIcs(production.title)}`,`LOCATION:${escapeIcs(stage?.name)}`,'END:VEVENT','END:VCALENDAR'].join('\r\n')
-}
-export function downloadIcs(event, production, stage) {
-  const content = createIcs(event, production, stage)
-  const url = URL.createObjectURL(new Blob([content], {type: 'text/calendar;charset=utf-8'}))
-  const a = document.createElement('a'); a.href = url; a.download = `${production.slug || 'parastasi'}.ics`; a.click(); URL.revokeObjectURL(url)
-}

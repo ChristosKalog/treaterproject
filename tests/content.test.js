@@ -12,7 +12,8 @@ test('κανονικοποιεί τα slugs άρθρων πριν δημιουρ
 })
 
 test('η αγγλική έκδοση εμφανίζει μόνο μεταφρασμένο και εγκεκριμένο περιεχόμενο',()=>{
-  const data=enrich({settings:{name:'Θέατρο',nameEn:'Amalia Theatre'},productions:[{_id:'p1',slug:'one',title:'Ένα',titleEn:'One',englishReady:true},{_id:'p2',slug:'two',title:'Δύο',titleEn:'Two',englishReady:false}],seasons:[],stages:[],engagements:[],events:[],articles:[]},'en')
+  const data=enrich({settings:{name:'Θέατρο',nameEn:'Amalia Theatre'},productions:[{_id:'p1',slug:'one',title:'Ένα',titleEn:'One',englishReady:true,poster:{alt:'Ελληνικό alt',altEn:'English alt'}},{_id:'p2',slug:'two',title:'Δύο',titleEn:'Two',englishReady:false}],seasons:[],stages:[],engagements:[],events:[],articles:[]},'en')
   assert.equal(data.settings.name,'Amalia Theatre')
   assert.deepEqual(data.productions.map(p=>p.title),['One'])
+  assert.equal(data.productions[0].poster.alt,'English alt')
 })

@@ -9,8 +9,8 @@ const isoAt = (offset, hour = 20, minute = 30) => {
 
 export const demoData = {
   settings: {
-    name: 'Θέατρο Άλφα',
-    nameEn: 'Alpha Theatre',
+    name: 'Θέατρο Αμαλία',
+    nameEn: 'Amalia Theatre',
     shortDescription: 'Σύγχρονο θέατρο στην καρδιά της πόλης, με παραστάσεις για όλες τις ηλικίες.',
     shortDescriptionEn: 'A contemporary theatre in the heart of the city, with performances for audiences of all ages.',
     heroMessage: 'Ζωντανές ιστορίες, νέες φωνές και παραστάσεις που μας φέρνουν πιο κοντά.',

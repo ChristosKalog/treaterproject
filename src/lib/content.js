@@ -1,12 +1,18 @@
 export const byId = (items = []) => new Map(items.map((item) => [item._id, item]))
 export const normalizeSlug = (value = '') => String(value).replace(/^\/+|\/+$/g, '')
 const localized = (item, lang, fields) => lang !== 'en' ? item : fields.reduce((next, field) => ({...next, [field]: item[`${field}En`] || item[field]}), {...item})
+const localizedImage = (image, lang) => image ? {...image, alt: lang === 'en' ? (image.altEn || image.alt) : image.alt} : image
 export function enrich(data, lang = 'el') {
-  const productionItems = (data.productions || []).filter((item) => lang === 'el' || item.englishReady).map((item) => ({...localized(item,lang,['title','summary','description','category','ageRating','priceInfo','credits']),slug:normalizeSlug(item.slug)}))
-  const articleItems = (data.articles || []).filter((item) => lang === 'el' || item.englishReady).map((item) => ({...localized(item,lang,['title','summary','body']),slug:normalizeSlug(item.slug)}))
+  const productionItems = (data.productions || []).filter((item) => lang === 'el' || item.englishReady).map((item) => ({...localized(item,lang,['title','summary','description','category','ageRating','priceInfo','credits']),slug:normalizeSlug(item.slug),poster:localizedImage(item.poster,lang),coverImage:localizedImage(item.coverImage,lang),desktopCoverImage:localizedImage(item.desktopCoverImage,lang),gallery:(item.gallery||[]).map((image)=>localizedImage(image,lang))}))
+  const articleItems = (data.articles || []).filter((item) => lang === 'el' || item.englishReady).map((item) => ({...localized(item,lang,['title','summary','body']),slug:normalizeSlug(item.slug),image:localizedImage(item.image,lang)}))
   const seasonItems = (data.seasons || []).map((item) => localized(item,lang,['title']))
   const stageItems = (data.stages || []).map((item) => localized(item,lang,['name','details']))
-  const settings = localized(data.settings || {},lang,['name','shortDescription','heroMessage','about','address','access','accessibility','seoTitle','seoDescription'])
+  const rawSettings = data.settings || {}
+  const settings = {...localized(rawSettings,lang,['name','shortDescription','heroMessage','about','address','access','accessibility','seoTitle','seoDescription']),logo:localizedImage(rawSettings.logo,lang),heroImage:localizedImage(rawSettings.heroImage,lang),contactHeroImage:localizedImage(rawSettings.contactHeroImage,lang)}
+  settings.accessCards = (rawSettings.accessCards || []).map((item) => {
+    const card = localized(item,lang,['title','description'])
+    return {...card,icon:localizedImage(item.icon,lang)}
+  })
   const productions = byId(productionItems), seasons = byId(seasonItems), stages = byId(stageItems), engagements = byId(data.engagements)
   const events = (data.events || []).map((event) => {
     const engagement = engagements.get(event.engagementId)
